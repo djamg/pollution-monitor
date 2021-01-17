@@ -3,12 +3,12 @@
 #include <ArduinoJson.h>
 #include "DHT.h"
 #define DHTTYPE DHT11   // DHT 11
-uint8_t DHTPin = 4; 
+uint8_t DHTPin = 33; 
 
 String serverName = "https://ptsv2.com/t/j7okf-1608917820/post";
 
-char ssid[] = "";     //  your network SSID (name)
-char pass[] = "";  // your network password
+char ssid[] = "ERROR2";     //  your network SSID (name)
+char pass[] = "n150wireless";  // your network password
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
 // the following variables are unsigned longs because the time, measured in
@@ -19,9 +19,9 @@ unsigned long lastTime = 0;
 // Set timer to 5 seconds (5000)
 unsigned long timerDelay = 10000;
 
-const int mq135 = 35;
-const int mq5 = 34;
-const int mq8 = 0;
+const int mq135 = 34;
+const int mq5 = 35;
+const int mq8 = 32;
 
 
 float value1 = 0;
@@ -66,15 +66,18 @@ void setup(){
 
 void loop(){
 
-      value1 = analogRead(mq135);
+  value1 = analogRead(mq135);
   value2 = analogRead(mq5);
-
+  value3 = analogRead(mq8);
+  
   Temperature = dht.readTemperature();
   Humidity = dht.readHumidity();
   Serial.print("MQ135: ");
   Serial.println(value1);
   Serial.print("MQ5: ");
   Serial.println(value2);
+  Serial.print("MQ8: ");
+  Serial.println(value3);
   Serial.print("Temp: ");
   Serial.println(Temperature);
   Serial.print("Humidity: ");
@@ -89,6 +92,7 @@ void loop(){
       DynamicJsonDocument doc(2048);
       doc["MQ135"] =  String(value1);
       doc["MQ5"] =  String(value2);
+      doc["MQ8"] = String(value3);
       doc["Temperature"]= String(Temperature); // Gets the values of the temperature
       doc["Humidity"] = String(Humidity); // Gets the values of the humidity 
       String json;
